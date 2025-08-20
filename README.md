@@ -7,6 +7,7 @@ A beginner-friendly introduction to the Model Context Protocol (MCP) with practi
 The Model Context Protocol (MCP) is an open standard that enables AI applications to securely connect with external data sources and tools. Think of it as a "universal USB port" for AI integrations.
 
 ### Key Benefits
+
 - **Standardized Communication**: One protocol works with any AI model or external service
 - **Reusable Integrations**: Build once, use with multiple AI applications
 - **Secure Connections**: Built-in security and permission management
@@ -23,6 +24,7 @@ This tutorial shows MCP concepts through a simple client-server example:
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Python 3.10+
 - [uv](https://docs.astral.sh/uv/) (fast Python package manager)
 
@@ -47,7 +49,8 @@ uv run client.py
 ```
 
 Expected output:
-```
+
+```markdown
 🤖 Starting Basic MCP Client Demo
 ==================================================
 🔗 Connecting to server...
@@ -67,7 +70,7 @@ Expected output:
 
 ## 📁 Project Structure
 
-```
+```markdown
 mcp-hello-world/
 ├── pyproject.toml          # Project configuration
 ├── server.py               # MCP Server implementation
@@ -104,7 +107,7 @@ The client demonstrates the complete MCP workflow:
 
 This example implements the standard MCP message exchange pattern:
 
-```
+```markdown
 Client                    Server
   │                         │
   ├─ ListToolsRequest ────► │
@@ -136,13 +139,17 @@ This project is designed for progressive learning:
 ## 🔍 Key Concepts Illustrated
 
 ### Standardization
+
 Both client and server use the same message types (`ListToolsRequest`, `CallToolRequest`, etc.) regardless of what the tools actually do. This means any MCP client can work with any MCP server.
 
 ### Modularity
+
 The server can be easily extended with new tools without changing the client code. The client can work with any MCP server without knowing the internal implementation.
 
 ### Real-World Parallel
+
 Replace our simple tools with:
+
 - `create_github_repo` instead of `say_hello`
 - `query_database` instead of `get_time`
 
@@ -152,19 +159,22 @@ The communication pattern remains identical!
 
 ### Common Issues
 
-**"ModuleNotFoundError: No module named 'mcp'"**
+#### "ModuleNotFoundError: No module named 'mcp'"
+
 ```bash
 # Make sure you're in the project directory and run:
 uv add mcp
 ```
 
-**"Permission denied" errors**
+#### "Permission denied" errors
+
 ```bash
 # On Unix systems, you might need:
 chmod +x server.py client.py
 ```
 
-**Server doesn't respond**
+#### Server doesn't respond
+
 - Ensure `server.py` runs without errors first
 - Check that both files are in the same directory
 
@@ -173,4 +183,3 @@ chmod +x server.py client.py
 - [Official MCP Documentation](https://modelcontextprotocol.io/)
 - [MCP Specification](https://spec.modelcontextprotocol.io/)
 - [Anthropic MCP Guide](https://docs.anthropic.com/en/docs/build-with-claude/mcp)
-
