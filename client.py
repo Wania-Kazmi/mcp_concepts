@@ -1,62 +1,80 @@
 
 # ============================================================================
 # client.py - Simple Client that Talks to Our Server
-# ============================================================================
+# ========================================================================
+
+"""
+🎯 Key Improvements:
+
+1. REAL FILE OPERATIONS:
+   - read_file: Actually reads files from your computer
+   - write_file: Creates/modifies files on your computer
+   - list_directory: Shows folder contents
+
+2. PRACTICAL TOOLS:
+   - create_report: Generates useful reports with current info
+   - Error handling: Proper error messages when things go wrong
+
+3. SAME MCP PATTERN:
+   - Still uses ListToolsRequest/Response
+   - Still uses CallToolRequest/Response
+   - Just the tools do more interesting things!
+
+4. REAL WORLD READY:
+   - These tools could be used by AI assistants
+   - File operations are fundamental for many applications
+   - Shows how MCP scales from simple to complex
+"""
 
 import asyncio
 import sys
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
-async def run_basic_client():
-    """
-    This demonstrates the exact flow from our diagram:
-    User -> Our Server -> MCP Client -> MCP Server -> Response back
-    """
+async def test_practical_tools():
+    print("🧪 Testing Practical MCP Tools")
+    print("=" * 40)
     
-    print("🤖 Starting Basic MCP Client Demo")
-    print("=" * 50)
-    
-    # Step 1: Connect to our server (like calling the food truck)
     server_params = StdioServerParameters(
         command=sys.executable,
-        args=["server.py"],
+        args=["server.py"]  # Use our enhanced server
     )
     
-    # Step 2: Start the conversation
     async with stdio_client(server_params) as (read, write):
         async with ClientSession(read, write) as session:
-            
-            # Step 3: Initialize (like introducing yourself to the food truck)
-            print("🔗 Connecting to server...")
             await session.initialize()
-            print("✅ Connected!")
             
-            # Step 4: Ask "What's on your menu?" (ListToolsRequest from diagram)
-            print("\n📋 Asking server: 'What tools do you have?'")
-            tools_response = await session.list_tools()
+            # Test 1: List all available tools
+            print("\\n1️⃣ Discovering available tools...")
+            tools = await session.list_tools()
+            for tool in tools.tools:
+                print(f"   📋 {tool.name}: {tool.description}")
             
-            print(f"📝 Server has {len(tools_response.tools)} tools:")
-            for tool in tools_response.tools:
-                print(f"   • {tool.name}: {tool.description}")
+            # Test 2: Create a simple file
+            print("\\n2️⃣ Creating a test file...")
+            result = await session.call_tool("write_file", {
+                "filename": "test.txt",
+                "content": "Hello from MCP!\\nThis file was created by an MCP tool."
+            })
+            print(f"   {result.content[0].text}")
             
-            # Step 5: Order something! (CallToolRequest from diagram)
-            print("\n🛠️ Using the 'say_hello' tool...")
-            result = await session.call_tool("say_hello", {"name": "Alice"})
+            # Test 3: Read the file back
+            print("\\n3️⃣ Reading the file back...")
+            result = await session.call_tool("read_file", {"filename": "test.txt"})
+            print(f"   {result.content[0].text}")
             
-            print("💬 Server response:")
-            for content in result.content:
-                print(f"   '{content.text}'")
+            # Test 4: List current directory
+            print("\\n4️⃣ Listing current directory...")
+            result = await session.call_tool("list_directory", {"path": "."})
+            print(f"   {result.content[0].text}")
             
-            # Step 6: Try the other tool
-            print("\n⏰ Using the 'get_time' tool...")
-            time_result = await session.call_tool("get_time", {})
+            # Test 5: Create a report
+            print("\\n5️⃣ Generating a report...")
+            result = await session.call_tool("create_report", {"title": "MCP Demo Report"})
+            print(f"   {result.content[0].text}")
             
-            print("🕐 Time response:")
-            for content in time_result.content:
-                print(f"   '{content.text}'")
-            
-            print("\n🎉 Demo complete! You just saw MCP in action!")
+            print("\\n🎉 All tests completed!")
 
 if __name__ == "__main__":
-    asyncio.run(run_basic_client())
+    asyncio.run(test_practical_tools())
+
